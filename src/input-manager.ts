@@ -5,7 +5,7 @@ import { BaseAction } from "./base-action";
 import { AxisAction } from "./axis-action";
 
 type Maybe<T> = T | undefined;
-type Constructor<T = object> = new (...args: never[]) => T;
+type AbstractConstructor<T = object> = abstract new (...args: never[]) => T;
 
 export class InputManager extends Destroyable {
   private readonly registeredActions = new Set<BaseAction>;
@@ -35,7 +35,7 @@ export class InputManager extends Destroyable {
     this.janitor.Add(InputService.InputChanged.Connect((input, processed) => this.handleInput(input, processed, true)));
   }
 
-  public getActionByID<T extends BaseAction = BaseAction>(actionID: string | number, actionType?: Constructor<T>): Maybe<T> {
+  public getActionByID<T extends BaseAction = BaseAction>(actionID: string | number, actionType?: AbstractConstructor<T>): Maybe<T> {
     return [...this.registeredActions]
       .filter((action): action is T => actionType !== undefined ? action instanceof actionType : true)
       .find(action => action.id === actionID);
