@@ -61,7 +61,7 @@ export class SequentialActionBuilder extends SequentialAction {
     return <SequentialActionBuilder>this;
   }
 
-  /** Sets the maximum time in between repeated inputs */
+  /** Sets the maximum time in between inputs in the sequence */
   public setTiming(this: Writable<SequentialActionBuilder>, timing: number): SequentialActionBuilder {
     this.timing = timing;
     return <SequentialActionBuilder>this;
