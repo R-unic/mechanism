@@ -1,0 +1,41 @@
+{
+  "name": "@rbxts/mechanism",
+  "version": "1.0.0",
+  "main": "out/init.lua",
+  "scripts": {
+    "build": "rbxtsc",
+    "watch": "rbxtsc -w",
+    "prepublishOnly": "npm run build"
+  },
+  "repository": {
+    "url": "git+https://github.com/R-unic/mechanism.git"
+  },
+  "keywords": [
+    "roblox",
+    "input",
+    "mechanism"
+  ],
+  "author": "runicly",
+  "license": "ISC",
+  "description": "An elegant input wrapper for Roblox",
+  "types": "out/index.d.ts",
+  "files": [
+    "out",
+    "!**/*.tsbuildinfo"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@rbxts/compiler-types": "^3.0.0-types.0",
+    "@rbxts/types": "^1.0.813",
+    "roblox-ts": "^3.0.0",
+    "typescript": "^5.7.2"
+  },
+  "dependencies": {
+    "@rbxts/destroyable": "^1.0.1",
+    "@rbxts/id": "^1.0.0",
+    "@rbxts/lazy-iterator": "^1.0.1",
+    "@rbxts/lemon-signal": "^1.2.0"
+  }
+}
