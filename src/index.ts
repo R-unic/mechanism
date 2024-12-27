@@ -1,3 +1,3 @@
-export function makeHello(name: string) {
-	return `Hello from ${name}!`;
-}
+export { InputManager } from "./input-manager";
+export { AxisActionBuilder } from "./axis-action";
+export { StandardActionBuilder } from "./standard-action";
