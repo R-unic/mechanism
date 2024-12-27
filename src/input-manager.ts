@@ -2,6 +2,7 @@ import { UserInputService as InputService } from "@rbxts/services";
 import Destroyable from "@rbxts/destroyable";
 
 import { BaseAction } from "./base-action";
+import { AxisAction } from "./axis-action";
 
 export class InputManager extends Destroyable {
   private readonly registeredActions = new Set<BaseAction>;
@@ -28,7 +29,7 @@ export class InputManager extends Destroyable {
 
     this.janitor.Add(InputService.InputBegan.Connect((input, processed) => this.handleInput(input, processed)));
     this.janitor.Add(InputService.InputEnded.Connect((input, processed) => this.handleInput(input, processed)));
-    this.janitor.Add(InputService.InputChanged.Connect((input, processed) => this.handleInput(input, processed)));
+    this.janitor.Add(InputService.InputChanged.Connect((input, processed) => this.handleInput(input, processed, true)));
   }
 
   public bind(action: BaseAction): void {
@@ -46,10 +47,19 @@ export class InputManager extends Destroyable {
     this.registeredActions.delete(action);
   }
 
-  private handleInput(input: InputObject, processed: boolean): void {
+  private handleInput(input: InputObject, processed: boolean, inputChanged = false): void {
     const inputType = input.UserInputType;
-    if (this.gamepadInputs.includes(inputType) && inputType !== Enum.UserInputType.Gamepad1 && !this.useAllGamepads) return;
-    for (const action of this.registeredActions)
+    if (this.isUsingUnknownGamepad(inputType)) return;
+
+    for (const action of this.registeredActions) {
+      if (inputChanged && !(action instanceof AxisAction)) continue;
       action.handleInput(input, processed);
+    }
+  }
+
+  private isUsingUnknownGamepad(inputType: Enum.UserInputType): boolean {
+    return this.gamepadInputs.includes(inputType) &&
+      inputType !== Enum.UserInputType.Gamepad1 &&
+      !this.useAllGamepads;
   }
 }

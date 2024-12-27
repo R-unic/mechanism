@@ -24,7 +24,7 @@ export abstract class CompositeAction extends StandardAction {
         super.handleInput(input, processed, isPress);
 
       return;
-    } else if (this.keyPressTimestamps.has(input.KeyCode))
+    } else
       this.keyPressTimestamps.delete(input.KeyCode);
 
     if (!this.isActive) return;

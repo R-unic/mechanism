@@ -28,6 +28,18 @@ export abstract class StandardAction extends BaseStandardAction {
   private queuedPresses = 0;
   private queuedReleases = 0;
 
+  public equals(other: unknown): boolean {
+    if (other instanceof StandardAction) {
+      const keyCodesMatch = this.keyCodes.every((keyCode, i) => other.keyCodes[i] === keyCode);
+      return keyCodesMatch &&
+        this.inputQueueing === other.inputQueueing &&
+        this.cooldown === other.cooldown;
+    }
+
+    return this === other;
+  }
+
+  /** @hidden */
   public handleInput(input: InputObject, processed: boolean, isPress = input.UserInputState === Enum.UserInputState.Begin): void {
     if (this.processed !== processed) return;
     if (!this.keyCodes.includes(input.KeyCode)) return;
