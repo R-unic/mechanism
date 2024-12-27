@@ -10,10 +10,10 @@ export abstract class StandardAction extends BaseAction {
   public readonly inputQueueing: boolean = false;
   public readonly cooldown: number = 0;
 
-  private queuedPresses = 0;
-  private queuedReleases = 0;
   private lastPress = 0;
   private lastRelease = 0;
+  private queuedPresses = 0;
+  private queuedReleases = 0;
 
   public handleInput(input: InputObject, processed: boolean, isPress = input.UserInputState === Enum.UserInputState.Begin): void {
     if (this.processed !== processed) return;
