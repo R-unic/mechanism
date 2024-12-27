@@ -35,8 +35,10 @@ export class InputManager extends Destroyable {
     this.janitor.Add(InputService.InputChanged.Connect((input, processed) => this.handleInput(input, processed, true)));
   }
 
-  public getActionByID(actionID: string | number): Maybe<BaseAction> {
-    return [...this.registeredActions].find(action => action.id === actionID);
+  public getActionByID<T extends BaseAction = BaseAction>(actionID: string | number, actionType?: AbstractConstructor<T>): Maybe<T> {
+    return [...this.registeredActions]
+      .filter((action): action is T => actionType !== undefined ? action instanceof actionType : true)
+      .find(action => action.id === actionID);
   }
 
   public bind(action: BaseAction): void {
