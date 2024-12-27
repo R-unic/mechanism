@@ -41,19 +41,25 @@ export class InputManager extends Destroyable {
       .find(action => action.id === actionID);
   }
 
-  public bind(action: BaseAction): void {
+  public bind(action: BaseAction): InputManager {
     this.registeredActions.add(action);
+    return this;
   }
 
-  public unbind(actionID: string | number): void
-  public unbind(action: BaseAction): void
-  public unbind(actionSpecifier: string | number | BaseAction): void {
-    if (actionSpecifier instanceof BaseAction)
-      return void this.registeredActions.delete(actionSpecifier);
+  public unbind(actionID: string | number): InputManager
+  public unbind(action: BaseAction): InputManager
+  public unbind(actionSpecifier: string | number | BaseAction): InputManager {
+    if (actionSpecifier instanceof BaseAction) {
+      this.registeredActions.delete(actionSpecifier);
+      return this;
+    }
 
     const action = [...this.registeredActions].find(action => action.id === actionSpecifier);
-    if (action === undefined) return;
+    if (action === undefined)
+      return this;
+
     this.registeredActions.delete(action);
+    return this;
   }
 
   private handleInput(input: InputObject, processed: boolean, inputChanged = false): void {
