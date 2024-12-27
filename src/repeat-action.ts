@@ -7,6 +7,7 @@ export abstract class RepeatAction extends StandardAction {
   private repeatCount = 0;
   private lastTap = 0;
 
+  /** @hidden */
   public override handleInput(input: InputObject, processed: boolean, isPress = input.UserInputState === Enum.UserInputState.Begin): void {
     if (this.processed !== processed) return;
     if (!this.keyCodes.includes(input.KeyCode)) return;

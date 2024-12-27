@@ -13,6 +13,7 @@ export abstract class AxisAction extends BaseAction {
     this.axes = axes;
   }
 
+  /** @hidden */
   public handleInput(this: Writable<AxisAction>, input: InputObject, processed: boolean): void {
     if (this.processed !== processed) return;
     if (!this.axes.includes(input.KeyCode) && !this.axes.includes(input.UserInputType)) return;

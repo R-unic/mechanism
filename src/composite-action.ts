@@ -4,6 +4,7 @@ export abstract class CompositeAction extends StandardAction {
   public readonly timing: number = 0;
   private readonly keyPressTimestamps = new Map<Enum.KeyCode, number>;
 
+  /** @hidden */
   public override handleInput(input: InputObject, processed: boolean, isPress = input.UserInputState === Enum.UserInputState.Begin): void {
     if (this.processed !== processed) return;
 

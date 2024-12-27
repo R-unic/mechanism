@@ -7,6 +7,7 @@ export abstract class SequentialAction extends StandardAction {
   private lastTap = 0;
   private firstInput = true;
 
+  /** @hidden */
   public override handleInput(input: InputObject, processed: boolean, isPress = input.UserInputState === Enum.UserInputState.Begin): void {
     if (this.processed !== processed) return;
 

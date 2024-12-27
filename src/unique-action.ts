@@ -8,6 +8,7 @@ export abstract class UniqueAction extends BaseStandardAction {
     this.actions = actions;
   }
 
+  /** @hidden */
   public override handleInput(input: InputObject, processed: boolean): void {
     const isPress = input.UserInputState === Enum.UserInputState.Begin;
     for (const action of this.actions)

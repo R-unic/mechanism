@@ -1,5 +1,6 @@
 export { InputManager } from "./input-manager";
 
+export { BaseAction } from "./base-action";
 export { AxisAction, AxisActionBuilder } from "./axis-action";
 export { StandardAction, StandardActionBuilder } from "./standard-action";
 export { RepeatAction, RepeatActionBuilder } from "./repeat-action";
