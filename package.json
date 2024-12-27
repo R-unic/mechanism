@@ -35,7 +35,6 @@
   "dependencies": {
     "@rbxts/destroyable": "^1.0.1",
     "@rbxts/id": "^1.0.0",
-    "@rbxts/lazy-iterator": "^1.0.1",
     "@rbxts/lemon-signal": "^1.2.0"
   }
 }
