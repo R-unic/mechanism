@@ -19,7 +19,7 @@ export abstract class BaseStandardAction extends BaseAction {
 }
 
 export abstract class StandardAction extends BaseStandardAction {
-  public readonly keyCodes: Enum.KeyCode[] = [];
+  public readonly keyCodes: Enum.KeyCode[];
   public readonly inputQueueing: boolean = false;
   public readonly cooldown: number = 0;
 
@@ -27,6 +27,11 @@ export abstract class StandardAction extends BaseStandardAction {
   private lastRelease = 0;
   private queuedPresses = 0;
   private queuedReleases = 0;
+
+  public constructor(...keyCodes: Enum.KeyCode[]) {
+    super();
+    this.keyCodes = keyCodes;
+  }
 
   public equals(other: unknown): boolean {
     if (other instanceof StandardAction) {
@@ -70,14 +75,6 @@ export class StandardActionBuilder extends StandardAction {
   public setID(this: Writable<StandardActionBuilder>, id: string | number): StandardActionBuilder {
     this.id = id;
     return <StandardActionBuilder>this;
-  }
-
-  /** Adds the keycodes that activate the action */
-  public addKeyCodes(...keyCodes: Enum.KeyCode[]): StandardActionBuilder {
-    for (const keyCode of keyCodes)
-      this.keyCodes.push(keyCode);
-
-    return this;
   }
 
   /** Sets whether the action is activated when gameProcessedEvent is true */

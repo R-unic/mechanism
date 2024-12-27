@@ -3,6 +3,11 @@ import { BaseStandardAction, StandardAction } from "./standard-action";
 export abstract class UniqueAction extends BaseStandardAction {
   public readonly actions: StandardAction[] = [];
 
+  public constructor(...actions: StandardAction[]) {
+    super();
+    this.actions = actions;
+  }
+
   public override handleInput(input: InputObject, processed: boolean): void {
     const isPress = input.UserInputState === Enum.UserInputState.Begin;
     for (const action of this.actions)
@@ -27,13 +32,5 @@ export class UniqueActionBuilder extends UniqueAction {
   public setProcessed(this: Writable<UniqueActionBuilder>, processed: boolean): UniqueActionBuilder {
     this.processed = processed;
     return <UniqueActionBuilder>this;
-  }
-
-  /** Adds the child actions that activate the unique action */
-  public addActions(...actions: StandardAction[]): UniqueActionBuilder {
-    for (const action of actions)
-      this.actions.push(action);
-
-    return this;
   }
 }
