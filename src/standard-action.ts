@@ -2,10 +2,23 @@ import Signal from "@rbxts/lemon-signal";
 
 import { BaseAction } from "./base-action";
 
-export abstract class StandardAction extends BaseAction {
+export abstract class BaseStandardAction extends BaseAction {
   public readonly activated = this.janitor.Add(new Signal, "Destroy");
   public readonly deactivated = this.janitor.Add(new Signal, "Destroy");
   public readonly isActive: boolean = false;
+
+  protected activate(this: Writable<BaseStandardAction>): void {
+    this.isActive = true;
+    this.activated.Fire();
+  }
+
+  protected deactivate(this: Writable<BaseStandardAction>): void {
+    this.isActive = false;
+    this.deactivated.Fire();
+  }
+}
+
+export abstract class StandardAction extends BaseStandardAction {
   public readonly keyCodes: Enum.KeyCode[] = [];
   public readonly inputQueueing: boolean = false;
   public readonly cooldown: number = 0;
@@ -37,16 +50,6 @@ export abstract class StandardAction extends BaseAction {
 
     this[isPress ? "lastPress" : "lastRelease"] = os.clock();
     isPress ? this.activate() : this.deactivate();
-  }
-
-  private activate(this: Writable<StandardAction>): void {
-    this.isActive = true;
-    this.activated.Fire();
-  }
-
-  private deactivate(this: Writable<StandardAction>): void {
-    this.isActive = false;
-    this.deactivated.Fire();
   }
 }
 
