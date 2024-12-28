@@ -21,7 +21,7 @@ input.unbind("testID");
 import { InputManager, StandardActionBuilder } from "@rbxts/mechanism";
 
 const input = new InputManager;
-const crouchAction = new StandardActionBuilder(Enum.KeyCode.C, Enum.KeyCode.LeftControl)
+const crouchAction = new StandardActionBuilder("C", "LeftCtrl")
   .setProcessed(false) // only activates when gameProcessedEvent is false, false by default
   .setCooldown(0.25); // can only be activated every 0.25 seconds
   .setInputQueueing(false); // if this were true, it would queue every input made during a cooldown to be activated after the cooldown is over
@@ -37,7 +37,7 @@ input.bind(crouchAction);
 import { InputManager, AxisActionBuilder } from "@rbxts/mechanism";
 
 const input = new InputManager;
-const scrollAction = new AxisActionBuilder(Enum.KeyCode.MouseWheel);
+const scrollAction = new AxisActionBuilder("MouseWheel");
 
 scrollAction.updated.Connect(() => print("scroll position:", scrollAction.position.Z));
 
@@ -50,7 +50,7 @@ A `RepeatAction` is an input that must be repeated multiple times to activate.
 import { InputManager, RepeatActionBuilder } from "@rbxts/mechanism";
 
 const input = new InputManager;
-const sprintAction = new RepeatActionBuilder(Enum.KeyCode.W)
+const sprintAction = new RepeatActionBuilder("W")
   .setRepeats(2) // takes 2 presses to activate
   .setTiming(0.3); // each press must be within 0.3 seconds of each other, 0 by default (which is infinite time between presses)
 
@@ -66,7 +66,7 @@ A `CompositeAction` is an action composed of multiple inputs that must all be si
 import { InputManager, CompositeActionBuilder } from "@rbxts/mechanism";
 
 const input = new InputManager;
-const toggleAction = new CompositeActionBuilder(Enum.KeyCode.LeftControl, Enum.KeyCode.LeftAlt, Enum.KeyCode.M)
+const toggleAction = new CompositeActionBuilder("LeftCtrl", "LeftAlt", "M")
   .setTiming(0.5); // each press must be within 0.5 seconds of each other
 
 toggleAction.activated.Connect(() => print("toggled"));
@@ -80,7 +80,7 @@ A `SequentialAction` is an action composed of multiple inputs that must all be p
 import { InputManager, SequentialActionBuilder } from "@rbxts/mechanism";
 
 const input = new InputManager;
-const menAction = new SequentialActionBuilder(Enum.KeyCode.M, Enum.KeyCode.E, Enum.KeyCode.N)
+const menAction = new SequentialActionBuilder("M", "E", "N")
   .setTiming(0.5); // each press must be within 0.5 seconds of each other
 
 menAction.activated.Connect(() => print("typed 'men' quickly"));
@@ -95,8 +95,8 @@ import { InputManager, UniqueActionBuilder } from "@rbxts/mechanism";
 
 const input = new InputManager;
 const cOrVAction = new UniqueActionBuilder(
-  new StandardActionBuilder(Enum.KeyCode.C),
-  new StandardActionBuilder(Enum.KeyCode.V)
+  new StandardActionBuilder("C"),
+  new StandardActionBuilder("V")
 );
 
 cOrVAction.activated.Connect(() => print("pressed C or V exclusively"));
@@ -110,7 +110,7 @@ A `DynamicAction` is an action containing one interchangable action.
 import { InputManager, DynamicAction } from "@rbxts/mechanism";
 
 const input = new InputManager;
-const crouchAction = new DynamicAction(new StandardActionBuilder(Enum.KeyCode.C)); // default bind
+const crouchAction = new DynamicAction(new StandardActionBuilder("C")); // default bind
 
 keybinds.changed.Connect(keybinds => 
   crouchAction.updateAction(new StandardActionBuilder(keybinds.crouch)) // update bind based on data
