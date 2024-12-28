@@ -1,5 +1,5 @@
 # Mechanism
-An elegant input wrapper for Roblox
+An elegant composable input library for Roblox
 
 ## Examples
 

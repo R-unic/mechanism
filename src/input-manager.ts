@@ -3,22 +3,13 @@ import Destroyable from "@rbxts/destroyable";
 
 import { BaseAction } from "./base-action";
 import { AxisAction } from "./axis-action";
+import { gamepadInputs } from "./common";
 
 type Maybe<T> = T | undefined;
 type AbstractConstructor<T = object> = abstract new (...args: never[]) => T;
 
 export class InputManager extends Destroyable {
   private readonly registeredActions = new Set<BaseAction>;
-  private readonly gamepadInputs: Enum.UserInputType[] = [
-    Enum.UserInputType.Gamepad1,
-    Enum.UserInputType.Gamepad2,
-    Enum.UserInputType.Gamepad3,
-    Enum.UserInputType.Gamepad4,
-    Enum.UserInputType.Gamepad5,
-    Enum.UserInputType.Gamepad6,
-    Enum.UserInputType.Gamepad7,
-    Enum.UserInputType.Gamepad8
-  ];
 
   public constructor(
     private readonly useAllGamepads = false
@@ -73,7 +64,7 @@ export class InputManager extends Destroyable {
   }
 
   private isUsingUnknownGamepad(inputType: Enum.UserInputType): boolean {
-    return this.gamepadInputs.includes(inputType) &&
+    return gamepadInputs.includes(inputType) &&
       inputType !== Enum.UserInputType.Gamepad1 &&
       !this.useAllGamepads;
   }

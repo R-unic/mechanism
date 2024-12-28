@@ -3,7 +3,7 @@ import { StandardAction } from "./standard-action";
 export abstract class SequentialAction extends StandardAction {
   public readonly timing: number = 0.3;
 
-  private keyCodeIndex = 0;
+  private rawInputIndex = 0;
   private lastTap = 0;
   private firstInput = true;
 
@@ -12,17 +12,17 @@ export abstract class SequentialAction extends StandardAction {
     if (this.processed !== processed) return;
 
     if (isPress) {
-      const expectedKeyCode = this.keyCodes[this.keyCodeIndex];
+      const expectedRawInput = this.rawInputs[this.rawInputIndex];
       const withinTime = this.firstInput || os.clock() - this.lastTap < this.timing;
-      if (expectedKeyCode !== undefined && input.KeyCode === expectedKeyCode && withinTime) {
+      if (expectedRawInput !== undefined && this.rawInputMatches(expectedRawInput, input) && withinTime) {
         this.firstInput = false;
-        if (this.keyCodeIndex === this.keyCodes.size() - 1)
+        if (this.rawInputIndex === this.rawInputs.size() - 1)
           super.handleInput(input, processed, isPress);
 
-        this.keyCodeIndex++
+        this.rawInputIndex++
       } else {
         this.firstInput = true;
-        this.keyCodeIndex = 0;
+        this.rawInputIndex = 0;
       }
 
       this.lastTap = os.clock();
@@ -30,7 +30,7 @@ export abstract class SequentialAction extends StandardAction {
     }
 
     if (!this.isActive) return;
-    if (this.keyCodeIndex < this.keyCodes.size() - 1) return;
+    if (this.rawInputIndex < this.rawInputs.size() - 1) return;
     super.handleInput(input, processed, isPress);
   }
 }
@@ -46,14 +46,6 @@ export class SequentialActionBuilder extends SequentialAction {
   public setProcessed(this: Writable<SequentialActionBuilder>, processed: boolean): SequentialActionBuilder {
     this.processed = processed;
     return <SequentialActionBuilder>this;
-  }
-
-  /** Adds the keycodes that activate the action */
-  public addKeyCodes(...keyCodes: Enum.KeyCode[]): SequentialActionBuilder {
-    for (const keyCode of keyCodes)
-      this.keyCodes.push(keyCode);
-
-    return this;
   }
 
   /** Sets a time to wait between each activation of the action */

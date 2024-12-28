@@ -1,14 +1,15 @@
 import Signal from "@rbxts/lemon-signal";
 
 import { BaseAction } from "./base-action";
+import { getRawInput, type RawInput } from "./common";
 
 export abstract class AxisAction extends BaseAction {
   public readonly updated = this.janitor.Add(new Signal, "Destroy");
-  public readonly axes: (Enum.KeyCode | Enum.UserInputType)[];
+  public readonly axes: RawInput[];
   public readonly delta = new Vector3;
   public readonly position = new Vector3;
 
-  public constructor(...axes: (Enum.KeyCode | Enum.UserInputType)[]) {
+  public constructor(...axes: RawInput[]) {
     super();
     this.axes = axes;
   }
@@ -16,7 +17,7 @@ export abstract class AxisAction extends BaseAction {
   /** @hidden */
   public handleInput(this: Writable<AxisAction>, input: InputObject, processed: boolean): void {
     if (this.processed !== processed) return;
-    if (!this.axes.includes(input.KeyCode) && !this.axes.includes(input.UserInputType)) return;
+    if (!this.axes.includes(getRawInput(input))) return;
 
     this.position = input.Position;
     this.delta = input.Delta;

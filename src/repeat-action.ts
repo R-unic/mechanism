@@ -10,7 +10,7 @@ export abstract class RepeatAction extends StandardAction {
   /** @hidden */
   public override handleInput(input: InputObject, processed: boolean, isPress = input.UserInputState === Enum.UserInputState.Begin): void {
     if (this.processed !== processed) return;
-    if (!this.keyCodes.includes(input.KeyCode)) return;
+    if (!this.supportsInput(input)) return;
 
     if (isPress) {
       if (os.clock() - this.lastTap < this.timing)
@@ -41,14 +41,6 @@ export class RepeatActionBuilder extends RepeatAction {
   public setProcessed(this: Writable<RepeatActionBuilder>, processed: boolean): RepeatActionBuilder {
     this.processed = processed;
     return <RepeatActionBuilder>this;
-  }
-
-  /** Adds the keycodes that activate the action */
-  public addKeyCodes(...keyCodes: Enum.KeyCode[]): RepeatActionBuilder {
-    for (const keyCode of keyCodes)
-      this.keyCodes.push(keyCode);
-
-    return this;
   }
 
   /** Sets a time to wait between each activation of the action */

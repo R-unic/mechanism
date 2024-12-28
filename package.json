@@ -1,6 +1,6 @@
 {
   "name": "@rbxts/mechanism",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "main": "out/init.lua",
   "scripts": {
     "build": "rbxtsc",
@@ -17,7 +17,7 @@
   ],
   "author": "runicly",
   "license": "ISC",
-  "description": "An elegant input wrapper for Roblox",
+  "description": "An elegant composable input library for Roblox",
   "types": "out/index.d.ts",
   "files": [
     "out",
@@ -35,6 +35,7 @@
   "dependencies": {
     "@rbxts/destroyable": "^1.0.1",
     "@rbxts/id": "^1.0.0",
-    "@rbxts/lemon-signal": "^1.2.0"
+    "@rbxts/lemon-signal": "^1.2.0",
+    "@rbxts/object-utils": "^1.0.4"
   }
 }

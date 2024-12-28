@@ -1,6 +1,7 @@
 import Signal from "@rbxts/lemon-signal";
 
 import { BaseAction } from "./base-action";
+import { getInputEnum, getRawInput, type RawInput } from "./common";
 
 export abstract class BaseStandardAction extends BaseAction {
   public readonly activated = this.janitor.Add(new Signal, "Destroy");
@@ -19,7 +20,7 @@ export abstract class BaseStandardAction extends BaseAction {
 }
 
 export abstract class StandardAction extends BaseStandardAction {
-  public readonly keyCodes: Enum.KeyCode[];
+  public readonly rawInputs: RawInput[];
   public readonly inputQueueing: boolean = false;
   public readonly cooldown: number = 0;
 
@@ -28,14 +29,14 @@ export abstract class StandardAction extends BaseStandardAction {
   private queuedPresses = 0;
   private queuedReleases = 0;
 
-  public constructor(...keyCodes: Enum.KeyCode[]) {
+  public constructor(...rawInputs: RawInput[]) {
     super();
-    this.keyCodes = keyCodes;
+    this.rawInputs = rawInputs;
   }
 
   public equals(other: unknown): boolean {
     if (other instanceof StandardAction) {
-      const keyCodesMatch = this.keyCodes.every((keyCode, i) => other.keyCodes[i] === keyCode);
+      const keyCodesMatch = this.rawInputs.every((keyCode, i) => other.rawInputs[i] === keyCode);
       return keyCodesMatch &&
         this.inputQueueing === other.inputQueueing &&
         this.cooldown === other.cooldown;
@@ -47,7 +48,7 @@ export abstract class StandardAction extends BaseStandardAction {
   /** @hidden */
   public handleInput(input: InputObject, processed: boolean, isPress = input.UserInputState === Enum.UserInputState.Begin): void {
     if (this.processed !== processed) return;
-    if (!this.keyCodes.includes(input.KeyCode)) return;
+    if (!this.supportsInput(input)) return;
 
     const coolingDown = this.cooldown > 0 && os.clock() - this[isPress ? "lastPress" : "lastRelease"] < this.cooldown;
     if (coolingDown) {
@@ -67,6 +68,14 @@ export abstract class StandardAction extends BaseStandardAction {
 
     this[isPress ? "lastPress" : "lastRelease"] = os.clock();
     isPress ? this.activate() : this.deactivate();
+  }
+
+  protected supportsInput(input: InputObject): boolean {
+    return this.rawInputs.some(rawInput => this.rawInputMatches(rawInput, input));
+  }
+
+  protected rawInputMatches(rawInput: RawInput, input: InputObject): boolean {
+    return rawInput === getRawInput(input);
   }
 }
 

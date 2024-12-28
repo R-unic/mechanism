@@ -1,24 +1,26 @@
 import { StandardAction } from "./standard-action";
+import { getRawInput, type RawInput } from "./common";
 
 export abstract class CompositeAction extends StandardAction {
   public readonly timing: number = 0;
-  private readonly keyPressTimestamps = new Map<Enum.KeyCode, number>;
+  private readonly keyPressTimestamps = new Map<RawInput, number>;
 
   /** @hidden */
   public override handleInput(input: InputObject, processed: boolean, isPress = input.UserInputState === Enum.UserInputState.Begin): void {
     if (this.processed !== processed) return;
 
+    const rawInput = getRawInput(input);
     if (isPress) {
-      this.keyPressTimestamps.set(input.KeyCode, os.clock());
+      this.keyPressTimestamps.set(rawInput, os.clock());
 
       let i = 1;
-      const shouldHandleInput = this.keyCodes.every(keyCode => {
-        const pressTimestamp = this.keyPressTimestamps.get(keyCode) ?? 0;
+      const shouldHandleInput = this.rawInputs.every(rawInput => {
+        const pressTimestamp = this.keyPressTimestamps.get(rawInput) ?? 0;
         const expectedPressTimestamp = os.clock() - this.timing * i++;
         const timeHeld = expectedPressTimestamp - pressTimestamp;
         return this.timing > 0 ?
           timeHeld < this.timing
-          : this.keyPressTimestamps.has(keyCode);
+          : this.keyPressTimestamps.has(rawInput);
       });
 
       if (shouldHandleInput)
@@ -26,7 +28,7 @@ export abstract class CompositeAction extends StandardAction {
 
       return;
     } else
-      this.keyPressTimestamps.delete(input.KeyCode);
+      this.keyPressTimestamps.delete(rawInput);
 
     if (!this.isActive) return;
     super.handleInput(input, processed, isPress);
@@ -44,14 +46,6 @@ export class CompositeActionBuilder extends CompositeAction {
   public setProcessed(this: Writable<CompositeActionBuilder>, processed: boolean): CompositeActionBuilder {
     this.processed = processed;
     return <CompositeActionBuilder>this;
-  }
-
-  /** Adds the keycodes that activate the action */
-  public addKeyCodes(...keyCodes: Enum.KeyCode[]): CompositeActionBuilder {
-    for (const keyCode of keyCodes)
-      this.keyCodes.push(keyCode);
-
-    return this;
   }
 
   /** Sets a time to wait between each activation of the action */
