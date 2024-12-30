@@ -1,15 +1,5 @@
-import Object from "@rbxts/object-utils";
-
-function enumerate<K extends string | number | symbol, V extends string | number | symbol>(object: Record<K, V>): Record<K, V> & Record<V, K> {
-  const clone = table.clone(object);
-  for (const key of Object.keys(clone))
-    clone[<K><unknown>clone[<K>key]] = <V>key;
-
-  return <Record<K, V> & Record<V, K>>clone;
-}
-
 // this is 100% not copied from gamejoy
-export const keyCodeAliases = enumerate({
+export const keyCodeAliases = {
   "0": "Zero",
   "1": "One",
   "2": "Two",
@@ -64,7 +54,7 @@ export const keyCodeAliases = enumerate({
   "R3": "ButtonR3",
   "LeftCtrl": "LeftControl",
   "RightCtrl": "RightControl"
-} satisfies { readonly [name: string]: Enum.KeyCode["Name"] });
+} satisfies { readonly [name: string]: Enum.KeyCode["Name"] };
 
 export const gamepadInputs: Enum.UserInputType[] = [
   Enum.UserInputType.Gamepad1,
@@ -81,7 +71,10 @@ export type RawInput = keyof typeof keyCodeAliases | Enum.KeyCode["Name"] | Enum
 
 export function getInputEnum(rawInput: RawInput): Enum.KeyCode | Enum.UserInputType {
   const unaliased = keyCodeAliases[<never>rawInput] ?? rawInput;
-  return unaliased in Enum.KeyCode ? Enum.KeyCode[unaliased] : Enum.UserInputType[unaliased];
+  const keyCodes = Enum.KeyCode.GetEnumItems();
+  return keyCodes.some(keyCode => keyCode.Name === unaliased) ?
+    Enum.KeyCode[unaliased]
+    : Enum.UserInputType[unaliased];
 }
 
 export function getRawInputFromEnum(inputEnum: Enum.KeyCode | Enum.UserInputType): RawInput {

@@ -75,7 +75,8 @@ export abstract class StandardAction extends BaseStandardAction {
   }
 
   protected rawInputMatches(rawInput: RawInput, input: InputObject): boolean {
-    return rawInput === getRawInput(input);
+    const inputEnum = getInputEnum(rawInput);
+    return input.KeyCode === inputEnum || input.UserInputType === inputEnum;
   }
 }
 
