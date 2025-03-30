@@ -1,18 +1,16 @@
-import { BaseStandardAction, StandardAction } from "./standard-action";
+import { BaseStandardAction } from "./standard-action";
 
 export class DynamicAction extends BaseStandardAction {
-  public readonly action: StandardAction = undefined!;
+  public readonly action!: BaseStandardAction;
 
   private readonly connections = new Set<RBXScriptConnection>;
 
-  public constructor(action: StandardAction) {
+  public constructor(action: BaseStandardAction) {
     super();
     this.updateAction(action);
   }
 
-  public updateAction(action: StandardAction): void {
-    if (this.action?.equals(action) ?? false) return;
-
+  public updateAction(action: BaseStandardAction): void {
     for (const connection of this.connections) {
       this.connections.delete(connection);
       connection.Disconnect();
@@ -24,8 +22,8 @@ export class DynamicAction extends BaseStandardAction {
   }
 
   /** @hidden */
-  public override handleInput(input: InputObject, processed: boolean, isPress = input.UserInputState === Enum.UserInputState.Begin): void {
+  public override handleInput(input: InputObject, processed: boolean): void {
     if (this.action === undefined) return;
-    this.action.handleInput(input, processed, isPress);
+    this.action.handleInput(input, processed);
   }
 }

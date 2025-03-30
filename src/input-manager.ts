@@ -15,7 +15,6 @@ export class InputManager extends Destroyable {
     private readonly useAllGamepads = false
   ) {
     super();
-
     this.janitor.Add(() => {
       for (const action of this.registeredActions)
         this.unbind(action);
