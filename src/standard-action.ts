@@ -1,11 +1,11 @@
 import Signal from "@rbxts/lemon-signal";
 
 import { BaseAction } from "./base-action";
-import { getInputEnum, getRawInput, type RawInput } from "./common";
+import { getInputEnum, type RawInput } from "./common";
 
 export abstract class BaseStandardAction extends BaseAction {
-  public readonly activated = this.janitor.Add(new Signal, "Destroy");
-  public readonly deactivated = this.janitor.Add(new Signal, "Destroy");
+  public readonly activated = this.trash.add(new Signal);
+  public readonly deactivated = this.trash.add(new Signal);
   public readonly isActive: boolean = false;
 
   protected activate(this: Writable<BaseStandardAction>): void {

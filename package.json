@@ -1,6 +1,6 @@
 {
   "name": "@rbxts/mechanism",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "main": "out/init.lua",
   "scripts": {
     "build": "rbxtsc",
@@ -33,8 +33,9 @@
     "typescript": "^5.7.2"
   },
   "dependencies": {
-    "@rbxts/destroyable": "^1.0.1",
+    "@rbxts/destroyable": "^1.0.2",
     "@rbxts/id": "^1.0.0",
-    "@rbxts/lemon-signal": "^1.2.0"
+    "@rbxts/lemon-signal": "^1.2.0",
+    "@rbxts/trash": "^1.0.1"
   }
 }

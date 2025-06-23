@@ -15,14 +15,14 @@ export class InputManager extends Destroyable {
     private readonly useAllGamepads = false
   ) {
     super();
-    this.janitor.Add(() => {
+    this.trash.add(() => {
       for (const action of this.registeredActions)
         this.unbind(action);
     });
 
-    this.janitor.Add(InputService.InputBegan.Connect((input, processed) => this.handleInput(input, processed)));
-    this.janitor.Add(InputService.InputEnded.Connect((input, processed) => this.handleInput(input, processed)));
-    this.janitor.Add(InputService.InputChanged.Connect((input, processed) => this.handleInput(input, processed, true)));
+    this.trash.add(InputService.InputBegan.Connect((input, processed) => this.handleInput(input, processed)));
+    this.trash.add(InputService.InputEnded.Connect((input, processed) => this.handleInput(input, processed)));
+    this.trash.add(InputService.InputChanged.Connect((input, processed) => this.handleInput(input, processed, true)));
   }
 
   public getActionByID<T extends BaseAction = BaseAction>(actionID: string | number, actionType?: AbstractConstructor<T>): Maybe<T> {

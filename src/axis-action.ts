@@ -4,7 +4,7 @@ import { BaseAction } from "./base-action";
 import { getRawInput, type RawInput } from "./common";
 
 export abstract class AxisAction extends BaseAction {
-  public readonly updated = this.janitor.Add(new Signal, "Destroy");
+  public readonly updated = this.trash.add(new Signal);
   public readonly axes: RawInput[];
   public readonly delta = new Vector3;
   public readonly position = new Vector3;
